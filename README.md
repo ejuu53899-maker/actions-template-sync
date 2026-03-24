@@ -316,6 +316,7 @@ jobs:
 | steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
 | template_sync_ignore_file_path | `[optional] set the path to the ignore file.` | false |`.templatesyncignore` |
 | is_with_tags | `[optional]` set to `true` if tags should be synced | `false` | `false` |
+| jules_api_key | `[optional]` Jules API Key to be used for Jules integration | `false` | |
 
 ### Action Outputs
 
