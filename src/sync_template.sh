@@ -423,6 +423,55 @@ function restore_templatesyncignore_file() {
   fi
 }
 
+#######################################
+# push a jules session.
+# Arguments:
+#   jules_api_key
+#   jules_prompt
+#   jules_github_repo
+#   pr_branch
+#######################################
+function push_jules_session() {
+  info "push jules session"
+  local jules_api_key=$1
+  local jules_prompt=$2
+  local jules_github_repo=$3
+  local pr_branch=$4
+
+  if [[ -z "${jules_api_key}" ]]; then
+    info "JULES_API_KEY is not set. Skipping jules session push."
+    return 0
+  fi
+
+  local prompt="${jules_prompt:-"Please review and integrate the changes from the template repository."}"
+  local repo="${jules_github_repo:-"${GITHUB_REPOSITORY}"}"
+
+  info "Pushing session to Jules for repo ${repo} and branch ${pr_branch}"
+
+  local payload
+  payload=$(jq -n \
+    --arg prompt "${prompt}" \
+    --arg source "sources/github/${repo}" \
+    --arg branch "${pr_branch}" \
+    '{
+      prompt: $prompt,
+      sourceContext: {
+        source: $source,
+        githubRepoContext: {
+          startingBranch: $branch
+        }
+      },
+      automationMode: "AUTO_CREATE_PR",
+      title: "Template Sync Session"
+    }')
+
+  curl -X POST \
+    -H "Content-Type: application/json" \
+    -H "X-Goog-Api-Key: ${jules_api_key}" \
+    -d "${payload}" \
+    https://jules.googleapis.com/v1alpha/sessions || warn "Failed to push session to Jules"
+}
+
 #########################################
 # reset all files within the .templatesyncignore file
 # Arguments:
@@ -553,6 +602,7 @@ function arr_prepare_pr_create_pr() {
     create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
   fi
 
+  push_jules_session "${JULES_API_KEY}" "${JULES_PROMPT}" "${JULES_GITHUB_REPO}" "${PR_BRANCH}"
 
   echo "::endgroup::"
 }

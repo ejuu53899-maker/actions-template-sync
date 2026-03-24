@@ -227,6 +227,10 @@ fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
 
+if [[ -n "${JULES_API_KEY}" ]]; then
+  info "Jules API Key is set. Enabling Jules integration."
+fi
+
 if [[ -n "${GPG_PRIVATE_KEY}" ]] &>/dev/null; then
   gpg_setup "${GPG_PRIVATE_KEY}" "${GIT_USER_EMAIL}"
 fi
