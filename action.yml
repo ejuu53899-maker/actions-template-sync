@@ -88,6 +88,10 @@ inputs:
     default: "false"
   jules_api_key:
     description: "[optional] Jules API Key to be used for Jules integration"
+  jules_prompt:
+    description: "[optional] Jules prompt to be used for Jules integration"
+  jules_github_repo:
+    description: "[optional] Jules github repo to be used for Jules integration"
 outputs:
   pr_branch:
     description: "The name of the PR branch"
@@ -138,3 +142,5 @@ runs:
         TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
         JULES_API_KEY: ${{ inputs.jules_api_key }}
+        JULES_PROMPT: ${{ inputs.jules_prompt }}
+        JULES_GITHUB_REPO: ${{ inputs.jules_github_repo }}

@@ -227,7 +227,7 @@ fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
 
-if [[ -n "${JULES_API_KEY}" ]] &>/dev/null; then
+if [[ -n "${JULES_API_KEY}" ]]; then
   info "Jules API Key is set. Enabling Jules integration."
 fi
 
